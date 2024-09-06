@@ -1,0 +1,47 @@
+services:
+  
+  app:
+    build: ./src/app
+    image: dash-celery-redis-example:latest
+    pull_policy: never
+    command: gunicorn --workers=1 --threads=1 --bind=0.0.0.0:8050 app:server
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=${REDIS_URL}
+    depends_on:
+      - worker
+      - redis
+    ports:
+      - "8050:8050"    
+  
+  worker:
+    image: dash-celery-redis-example:latest
+    pull_policy: never
+    command: celery -A worker.celery_app worker --loglevel=INFO -n worker@example_app
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=${REDIS_URL}
+    depends_on:
+      - redis
+  
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "6379:6379"
+  
+  monitor:
+    image: dash-celery-redis-example:latest
+    pull_policy: never
+    command: celery -A worker.celery_app flower
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=${REDIS_URL}
+    ports:
+      - 5555:5555
+    depends_on:
+      - app
+      - redis
+      - worker
