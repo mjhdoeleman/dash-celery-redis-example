@@ -13,7 +13,7 @@ services:
       - worker
       - redis
     ports:
-      - "8050:8050"    
+      - 8050:8050
   
   worker:
     image: dash-celery-redis-example:latest
@@ -29,7 +29,7 @@ services:
   redis:
     image: redis:7.4-alpine
     ports:
-      - "6379:6379"
+      - 6379:6379
   
   monitor:
     image: dash-celery-redis-example:latest
