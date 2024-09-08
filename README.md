@@ -10,7 +10,7 @@ An example setup to run a containerized Dash application with background callbac
 
 - Docker
 - Docker compose
-- .env-file with env-variable `REDIS_URL` pointing to a running Redis instance
+- .env-file with env-variable `REDIS_URL` pointing to a running Redis instance (default is `redis://redis/6379/0`)
 
 ## Deployment
 
